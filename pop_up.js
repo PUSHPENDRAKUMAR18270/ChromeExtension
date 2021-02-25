@@ -7,30 +7,39 @@
 //       document.querySelectorAll("a").addClass('focus');
 
 //   });
-function removeFocusFromAll()
-{
-    var sites=document.querySelectorAll("i");
-    for(var i=0;i<sites.length;i++)
-    {
-        sites[i].classList.remove('focus');
-    }
+// function removeFocusFromAll()
+// {
+//     var sites=document.querySelectorAll("i");
+//     for(var i=0;i<sites.length;i++)
+//     {
+//         sites[i].classList.remove('focus');
+//     }
     
-}
-document.querySelectorAll("i")[0].classList.add('focus');
-document.getElementById("youtube").addEventListener("click", function() {
-    removeFocusFromAll();
-    document.querySelectorAll("i")[0].classList.add('focus');
-  });
-  document.getElementById("facebook").addEventListener("click", function() {
-    removeFocusFromAll();
-    document.querySelectorAll("i")[1].classList.add('focus');
+// }
+// document.querySelectorAll("i")[0].classList.add('focus');
+// document.getElementById("youtube").addEventListener("click", function() {
+//     removeFocusFromAll();
+//     document.querySelectorAll("i")[0].classList.add('focus');
+//   });
+//   document.getElementById("facebook").addEventListener("click", function() {
+//     removeFocusFromAll();
+//     document.querySelectorAll("i")[1].classList.add('focus');
 
+//   });
+//   document.getElementById("instagram").addEventListener("click", function() {
+//     removeFocusFromAll();
+//     document.querySelectorAll("i")[2].classList.add('focus');
+//   });
+//   document.getElementById("mail").addEventListener("click", function() {
+//     removeFocusFromAll();
+//     document.querySelectorAll("i")[3].classList.add('focus');
+//   });
+
+document.getElementById("startTimer").addEventListener("click",function(){
+  chrome.tabs.query({active: true, currentWindow: true},(tabs)=>{
+    chrome.tabs.executeScript(tabs[0].id,{file:'foreground.js'},function(){
+      console.log("executed foreground.js");
+    });
   });
-  document.getElementById("instagram").addEventListener("click", function() {
-    removeFocusFromAll();
-    document.querySelectorAll("i")[2].classList.add('focus');
-  });
-  document.getElementById("mail").addEventListener("click", function() {
-    removeFocusFromAll();
-    document.querySelectorAll("i")[3].classList.add('focus');
-  });
+  
+});
