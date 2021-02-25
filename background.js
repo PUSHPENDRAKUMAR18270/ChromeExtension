@@ -1,17 +1,16 @@
-// chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-//     let url = tabs[0].url;
-//     // use `url` here inside the callback because it's asynchronous!
-//     console.log(url);
-// });
-chrome.tabs.onActivated.addListener(tab=>{
+
+chrome.tabs.onUpdated.addListener(tab=>{
     console.log(tab.tabId);
-    chrome.tabs.get(tab.tabId,current_tab_info=>{
-        if(current_tab_info.url.includes("youtube"))
-        {
-            console.log("youtube present");
-        }
-        else {
-            console.log(current_tab_info.url);
-        }
+    chrome.tabs.executeScript(tab.tabId,{file:'foreground.js'},function(){
+        console.log("executed foreground.js");
     });
+    // chrome.tabs.get(tab.tabId,current_tab_info=>{
+    //     if(current_tab_info.url.includes("youtube"))
+    //     {
+    //         console.log("youtube present");
+    //     }
+    //     else {
+    //         console.log(current_tab_info.url);
+    //     }
+    // });
 });
