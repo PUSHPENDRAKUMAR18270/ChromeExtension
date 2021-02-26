@@ -63,9 +63,10 @@ i{
 }
 
 button{
-  width: 100%;
+  width: 80px;
   height: 40px;
   margin-bottom: 8px;
+  /* margin-right: 20px; */
   background-color:lightblue;
   color:#2f5876;
   border-radius: 10px;

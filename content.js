@@ -427,43 +427,100 @@ TimeMe.initialize({
     idleTimeoutInSeconds: 5 // stop recording time due to inactivity
 });
 
-
+// chrome.runtime.sendMessage({
+// 	from: 'content',
+// 	subject: 'showPageAction',
+// });
 
 //functions to perform on each webpage
-    var element = document.createElement("button");
-    element.innerHTML=0;
-    element.setAttribute("id", "timeInSeconds");
-    element.style.top = 0;
-    element.style.right = 0;
-    element.style.position='fixed';
-    element.style.width = 'fit-content';
-    element.style.height = 'fit-content';
+    // var element = document.createElement("button");
+    // element.innerHTML=0;
+    // element.setAttribute("id", "timeInSeconds");
+    // element.style.top = 0;
+    // element.style.right = 0;
+    // element.style.position='fixed';
+    // element.style.width = 'fit-content';
+    // element.style.height = 'fit-content';
    var body = document.getElementsByTagName('body')[0];
-   if(body.id==""||body.id=="timeTrackingId")
-   {
+//    if(body.id==""||body.id=="timeTrackingId")
+//    {
+	   var trackingId="timeTrackingId";
+	   var timeSpent="00:00:00";
+	//    chrome.storage.local.set({"timeSpent":timeSpent}, function() {
+	// 		console.log('Value is set to ' + timeSpent);
+	// 	//sendResponse({time:timeSpent});
+	// 	});
        if(body.id=="")
        {
-            body.appendChild(element);
-            body.setAttribute("id", "timeTrackingId");
-            
+            //body.appendChild(element);
+            body.setAttribute("id", "timeTrackingId");  
        }
-       TimeMe.trackTimeOnElement('timeTrackingId');
-        setInterval(function () {
-            let timeSpentOnElement = TimeMe.getTimeOnElementInSeconds('timeTrackingId');
+	   else{
+		   trackingId=body.id;
+	   }
+       TimeMe.startTimer(trackingId);
+        var timeInterval=setInterval(function () {
+            let timeSpentOnElement = TimeMe.getTimeOnElementInSeconds(trackingId);
             //console.log('time '+timeSpentOnElement)
-            var timer=document.getElementById('timeInSeconds');
-            if(timer!=null)
-                timer.textContent = timeSpentOnElement.toFixed(2);
-            else{
-                console.log('timer '+timer);
-                console.log('pop_up not opened');
-            }
+            //var timer=document.getElementById('timeInSeconds');
+			timeSpent=new Date(timeSpentOnElement * 1000).toISOString().substr(11, 8);
+			//console.log('time '+timeSpent);
+			//var value=timeSpent.substring(0,6);
+			chrome.storage.local.set({"timeSpent": timeSpent}, function() {
+				console.log('Value is set to ' + timeSpent);
+			});
+			
+            // if(timer!=null)
+            //     timer.textContent = new Date(timeSpentOnElement * 1000).toISOString().substr(11, 8);
+            // else{
+            //     console.log('timer '+timer);
+            //     console.log('pop_up not opened');
+            // }
         },37);
-   }
-   else{
-       console.log('body id'+body.id);
-       console.log('body id is not null');
-   }
+		// setInterval(function(){
+		// 	var value=timeSpent.substring(0,5);
+		// 	chrome.storage.local.set({"timeSpent": value}, function() {
+		// 		console.log('Value is set to ' + value);
+		// 		//sendResponse({time:timeSpent});
+		// });},60000);
+
+		// chrome.extension.onConnect.addListener(function(port) {
+		// 	console.log("Connected .....");
+		// 	port.onMessage.addListener(function(msg) {
+		// 		console.log("message recieved " + msg);
+		// 		port.postMessage(timeSpent);
+		// 	});
+		// });
+		// chrome.runtime.onConnect.addListener(function(port) {
+		// 	//console.assert(port.name == "knockknock");
+		// 	port.onMessage.addListener(function(msg) {
+		// 		if (msg.info == "stopTimer")
+		// 		{
+		// 		  TimeMe.stopTimer(trackingId);
+		// 		}
+		// 	});
+		//   });
+		// port.onMessage.addListener(function(msg) {
+		// 	if (msg == "stopTimer")
+		// 	  {
+		// 		TimeMe.stopTimer(trackingId);
+		// 	  }
+		//   });
+		chrome.runtime.onMessage.addListener(
+			function(msg, sender, sendResponse) {
+				if ((msg.from === 'pop_up') && (msg.subject === 'stopTimer')) 
+				{
+					console.log('message received');
+					TimeMe.stopTimer(trackingId);
+					clearInterval(timeInterval);
+				}	
+			}
+		);
+//    }
+//    else{
+//        console.log('body id'+body.id);
+//        console.log('body id is not null');
+//    }
 
 
 // let timeSpentOnElement = TimeMe.getTimeOnElementInSeconds('timemeTrackingId');
