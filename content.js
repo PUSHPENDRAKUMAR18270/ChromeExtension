@@ -441,17 +441,13 @@ TimeMe.initialize({
 	   else{
 		   trackingId=body.id;
 	   }
-       TimeMe.startTimer(trackingId);
+       TimeMe.trackTimeOnElement(trackingId);
         var timeInterval=setInterval(function () {
             let timeSpentOnElement = TimeMe.getTimeOnElementInSeconds(trackingId);
             
 			timeSpent=new Date(timeSpentOnElement * 1000).toISOString().substr(11, 8);
-			
-			chrome.storage.local.set({"timeSpent": timeSpent}, function() {
-				console.log('Value is set to ' + timeSpent);
-			});
-			
-          
+			console.log(timeSpent);
+			chrome.storage.local.set({"timeSpent": timeSpent});
         },37);
 		
 		chrome.runtime.onMessage.addListener(
