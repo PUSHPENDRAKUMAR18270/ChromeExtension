@@ -424,7 +424,7 @@
 //initialise timeme
 TimeMe.initialize({
     currentPageName: "my-home-page", // current page
-    idleTimeoutInSeconds: 5 // stop recording time due to inactivity
+    idleTimeoutInSeconds: 180 // stop recording time due to inactivity
 });
 
 
@@ -446,7 +446,7 @@ TimeMe.initialize({
             let timeSpentOnElement = TimeMe.getTimeOnElementInSeconds(trackingId);
             
 			timeSpent=new Date(timeSpentOnElement * 1000).toISOString().substr(11, 8);
-			console.log(timeSpent);
+			//console.log(timeSpent);
 			chrome.storage.local.set({"timeSpent": timeSpent});
         },37);
 		
